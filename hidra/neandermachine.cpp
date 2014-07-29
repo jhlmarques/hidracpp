@@ -118,9 +118,11 @@ void NeanderMachine::step() {
     }
 
     // Advance PC:
-    PC->incrementValue();
-    if(PC->getValue() == 0) { // TO-DO: Breakpoint
-        this->running = false;
+    if (this->running) {
+        PC->incrementValue();
+        if(PC->getValue() == 0) { // TO-DO: Breakpoint
+            this->running = false;
+        }
     }
 
     // Execute instruction:
