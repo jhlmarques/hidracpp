@@ -18,17 +18,31 @@ NeanderMachine::NeanderMachine()
         *j = new Byte();
     }
 
-    //test code
-    memory[0]->setValue(32);
-    memory[1]->setValue(128);
-    memory[2]->setValue(48);
-    memory[3]->setValue(129);
-    memory[4]->setValue(16);
-    memory[5]->setValue(130);
-    memory[6]->setValue(240);
-    memory[128]->setValue(4);
-    memory[129]->setValue(8);
-    memory[130]->setValue(2);
+    // TEST CODE:
+    memory[0]->setValue(4); // NOP
+
+    memory[1]->setValue(32);
+    memory[2]->setValue(128); // LDA 128
+
+    memory[3]->setValue(48);
+    memory[4]->setValue(129); // ADD 129
+
+    memory[5]->setValue(16);
+    memory[6]->setValue(130); // STA 130
+
+    memory[7]->setValue(128);
+    memory[8]->setValue(255); // JMP 255
+
+    memory[255]->setValue(48); // ADD...
+
+    memory[128]->setValue(4); // MEM 128 = 4
+    memory[129]->setValue(8); // MEM 129 = 8
+    memory[130]->setValue(2); // MEM 130 = 2
+
+    // EXPECTED:
+    // 128 must be 4
+    // 129 must be 8
+    // 130 must be 12
 
     // initialize instructions
     instructions = QVector<Instruction*>(11);
@@ -54,6 +68,7 @@ void NeanderMachine::printStatusDebug()
 {
     std::cout << "PC: " << PC->getValue() << std::endl;
     std::cout << "AC: " << AC->getValue() << std::endl;
+
     int j;
     QVector<Byte*>::iterator i;
     for(j = 0, i = memory.begin(); i != memory.end(); i++, j=j+1) {
@@ -85,55 +100,69 @@ void NeanderMachine::save(QString filename){
 }
 
 void NeanderMachine::step() {
-    const Instruction* actualInstruction = getInstructionFromValue(memory[PC->getValue()]->getValue());
+    const Instruction* actualInstruction;
     Byte *operand;
+
+    actualInstruction = getInstructionFromValue(memory[PC->getValue()]->getValue());
+    std::cout << "Instruction: " << actualInstruction->getValue() << "\n";
+
+    // Read instruction. If instruction requires operand, advance PC and read operand:
     if(actualInstruction->getNumberOfArguments() == 1) {
-        PC->setValue(PC->getValue() + 1);
+        PC->incrementValue();
+        if(PC->getValue() == 0) { // TO-DO: Breakpoint
+            this->running = false;
+        }
+
         operand = memory[PC->getValue()];
+        std::cout << "Operand: " << (int)operand->getValue() << "\n";
     }
+
+    // Advance PC:
+    PC->incrementValue();
+    if(PC->getValue() == 0) { // TO-DO: Breakpoint
+        this->running = false;
+    }
+
+    // Execute instruction:
     switch (actualInstruction->getValue() & 0xF0) {
-    case 0:
+    case 0x00: // NOP
         break;
-    case 0x10:
+    case 0x10: // STA
         memory[operand->getValue()]->setValue((unsigned char)AC->getValue());
         break;
-    case 0x20:
+    case 0x20: // LDA
         AC->setValue(memory[operand->getValue()]->getValue());
         break;
-    case 0x30:
+    case 0x30: // ADD
         AC->setValue(AC->getValue() + memory[operand->getValue()]->getValue());
         break;
-    case 0x40:
+    case 0x40: // OR
         AC->setValue(AC->getValue() | memory[operand->getValue()]->getValue());
         break;
-    case 0x50:
+    case 0x50: // AND
         AC->setValue(AC->getValue() & memory[operand->getValue()]->getValue());
         break;
-    case 0x60:
+    case 0x60: // NOT
         AC->setValue(AC->getValue() ^ 0xFF);
         break;
-    case 0x80:
+    case 0x80: // JMP
         PC->setValue(operand->getValue());
         break;
-    case 0x90:
+    case 0x90: // JN
         if(flags[0]) {
             PC->setValue(operand->getValue());
         }
         break;
-    case 0xA0:
+    case 0xA0: // JZ
         if(flags[1]) {
             PC->setValue(operand->getValue());
         }
         break;
-    case 0xF0:
+    case 0xF0: // HLT
         this->running = false;
         break;
     default:
         break;
-    }
-    PC->setValue(PC->getValue() + 1);
-    if(PC->getValue() ==  MEM_SIZE) {
-        this->running = false;
     }
 }
 

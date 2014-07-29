@@ -5,9 +5,11 @@ class Register
 {
 public:
     Register();
+    Register(int numOfBits);
 
     int getValue() const;
     void setValue(int value);
+    void incrementValue();
 
     int getNumOfBits() const;
     void setNumOfBits(int value);
