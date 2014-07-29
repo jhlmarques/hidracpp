@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\hidragui.o
+./release\machine.o
+./release\bit.o
+./release\register.o
+./release\byte.o
+./release\instruction.o
+./release\neandermachine.o
+./release\moc_hidragui.o
+./release\moc_machine.o
+);

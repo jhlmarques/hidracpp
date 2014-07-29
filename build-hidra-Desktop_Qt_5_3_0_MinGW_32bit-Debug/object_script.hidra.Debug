@@ -1,0 +1,12 @@
+INPUT(
+./debug\main.o
+./debug\hidragui.o
+./debug\machine.o
+./debug\bit.o
+./debug\register.o
+./debug\byte.o
+./debug\instruction.o
+./debug\neandermachine.o
+./debug\moc_hidragui.o
+./debug\moc_machine.o
+);
