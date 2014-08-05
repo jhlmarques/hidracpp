@@ -5,7 +5,7 @@ NeanderMachine::NeanderMachine()
     registers = QVector<Register*>(2);
     QVector<Register*>::iterator i;
     for(i = registers.begin(); i != registers.end(); i++) {
-        *i = new Register();
+        *i = new Register(8);
     }
     PC = registers[1];
     AC = registers[0];

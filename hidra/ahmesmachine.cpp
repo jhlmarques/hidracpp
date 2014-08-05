@@ -3,7 +3,10 @@
 AhmesMachine::AhmesMachine()
 {
     registers = QVector<Register*>(2);
-    for (int k = 0; k < registers.size(); k++) registers[k] = new Register();
+    for (int k = 0; k < registers.size(); k++)
+    {
+        registers[k] = new Register(8);
+    }
 
     PC = registers[1];
     AC = registers[0];

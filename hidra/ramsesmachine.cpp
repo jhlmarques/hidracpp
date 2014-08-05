@@ -5,7 +5,7 @@ RamsesMachine::RamsesMachine()
     registers = QVector<Register*>(4);
     QVector<Register*>::iterator i;
     for (i = registers.begin(); i != registers.end(); i++) {
-        *i = new Register();
+        *i = new Register(8);
     }
     RA = registers[0];
     RB = registers[1];
