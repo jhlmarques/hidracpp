@@ -28,7 +28,7 @@ CromagMachine::CromagMachine()
         *j = new Byte();
     }
 
-    instructions = QVector<Instruction*>(16);
+    instructions = QVector<Instruction*>(13);
     instructions[0]  = new Instruction("nop",   0, 0);
     instructions[1]  = new Instruction("str",  16, 1);
     instructions[2]  = new Instruction("ldr",  32, 1);
@@ -36,12 +36,12 @@ CromagMachine::CromagMachine()
     instructions[4]  = new Instruction( "or",  64, 1);
     instructions[5]  = new Instruction("and",  80, 1);
     instructions[6]  = new Instruction("not",  96, 0);
-    instructions[8]  = new Instruction("jmp", 128, 1);
-    instructions[9]  = new Instruction( "jn", 144, 1);
-    instructions[10] = new Instruction( "jz", 160, 1);
-    instructions[11] = new Instruction( "jc", 176, 1);
-    instructions[14] = new Instruction("shr", 224, 0);
-    instructions[15] = new Instruction("hlt", 240, 0);
+    instructions[7]  = new Instruction("jmp", 128, 1);
+    instructions[8]  = new Instruction( "jn", 144, 1);
+    instructions[9] = new Instruction( "jz", 160, 1);
+    instructions[10] = new Instruction( "jc", 176, 1);
+    instructions[11] = new Instruction("shr", 224, 0);
+    instructions[12] = new Instruction("hlt", 240, 0);
 }
 
 void CromagMachine::printStatusDebug()
