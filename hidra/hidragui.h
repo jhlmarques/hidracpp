@@ -12,6 +12,7 @@
 #include "neandermachine.h"
 #include "ahmesmachine.h"
 #include "ramsesmachine.h"
+#include "cromagmachine.h"
 
 namespace Ui {
 class HidraGui;

@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     ahmesmachine.cpp \
     hidracli.cpp \
     hidrahighlighter.cpp \
-    hidracodeeditor.cpp
+    hidracodeeditor.cpp \
+    cromagmachine.cpp
 
 HEADERS  += hidragui.h \
     machine.h \
@@ -37,7 +38,8 @@ HEADERS  += hidragui.h \
     ahmesmachine.h \
     hidracli.h \
     hidrahighlighter.h \
-    hidracodeeditor.h
+    hidracodeeditor.h \
+    cromagmachine.h
 
 FORMS    += hidragui.ui
 
