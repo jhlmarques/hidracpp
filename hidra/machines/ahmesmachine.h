@@ -19,8 +19,6 @@ public:
     virtual Instruction* getInstructionFromValue(int);
     virtual Instruction* getInstructionFromMnemonic(QString);
 
-    virtual Machine::ErrorCode mountInstruction(QString mnemonic, QString arguments, QHash<QString, int> &labelPCMap);
-
     static const int MEM_SIZE = 256;
     static const int MAX_VALUE = 255;
     static const int MAX_SIGNED_VALUE = 127; // Maximum positive number for 8-bits in two's complement

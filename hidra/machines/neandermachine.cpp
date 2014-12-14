@@ -18,16 +18,10 @@ NeanderMachine::NeanderMachine()
     //////////////////////////////////////////////////
 
     memory = QVector<Byte*>(MEM_SIZE);
-    assemblerMemory = QVector<Byte*>(MEM_SIZE);
-    reserved = QVector<bool>(MEM_SIZE);
-
     correspondingLine = QVector<int>(MEM_SIZE); // Each PC value can have its corresponding line of code
 
     for (int i=0; i<memory.size(); i++)
         memory[i] = new Byte();
-
-    for (int i=0; i<assemblerMemory.size(); i++)
-        assemblerMemory[i] = new Byte();
 
     setBreakpoint(0); // Reset breakpoint
 
@@ -198,39 +192,6 @@ void NeanderMachine::step()
 //        this->step();
 //    }
 //}
-
-// Returns 0 if no error, otherwise returns error code
-Machine::ErrorCode NeanderMachine::mountInstruction(QString mnemonic, QString arguments, QHash<QString, int> &labelPCMap)
-{
-    Instruction *instruction = getInstructionFromMnemonic(mnemonic);
-    QStringList argumentList = arguments.split(" ", QString::SkipEmptyParts);
-    int numberOfArguments = instruction->getNumberOfArguments();
-
-    // Check if correct number of arguments:
-    if (argumentList.size() != numberOfArguments)
-        return wrongNumberOfArguments;
-
-    // Write instruction:
-    assemblerMemory[PC->getValue()]->setValue(instruction->getValue());
-    PC->incrementValue();
-
-    if (numberOfArguments == 1)
-    {
-        // Convert possible label to number:
-        if (labelPCMap.contains(argumentList[0]))
-            argumentList[0] = QString::number(labelPCMap.value(argumentList[0]));
-
-        // Check if valid argument:
-        if (!isValidAddress(argumentList[0]))
-            return invalidAddress;
-
-        // Write argument:
-        assemblerMemory[PC->getValue()]->setValue(argumentList[0].toInt(NULL, 0));
-        PC->incrementValue();
-    }
-
-    return noError;
-}
 
 Instruction* NeanderMachine::getInstructionFromValue(int value)
 {

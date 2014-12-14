@@ -14,7 +14,7 @@
 #include "hidrahighlighter.h"
 #include "registerwidget.h"
 #include "flagwidget.h"
-#include "machines/neandermachine.h"
+#include "machines/neandermachine.h" // TODO: Needed?
 #include "machines/ahmesmachine.h"
 #include "machines/ramsesmachine.h"
 

@@ -126,6 +126,7 @@ void HidraGui::clearMachineInterfaceComponents()
     clearMemoryMap();
     clearRegisterWidgets();
     clearFlagWidgets();
+    clearErrorsField();
 }
 
 void HidraGui::clearMemoryMap()
@@ -147,6 +148,11 @@ void HidraGui::clearFlagWidgets()
         delete ui->layoutFlags->takeAt(0)->widget();
 
     flagWidgets.clear();
+}
+
+void HidraGui::clearErrorsField()
+{
+    ui->textEditError->clear();
 }
 
 
@@ -283,11 +289,6 @@ void HidraGui::saveAs()
 // Errors field
 //////////////////////////////////////////////////
 
-void HidraGui::clearErrorsField()
-{
-    ui->textEditError->clear();
-}
-
 void HidraGui::addError(QString errorString)
 {
     ui->textEditError->setPlainText(ui->textEditError->toPlainText() + errorString + "\n");
@@ -355,12 +356,14 @@ void HidraGui::on_actionRodar_triggered()
 void HidraGui::on_actionMontar_triggered()
 {
     clearErrorsField();
-    machine->assemble(codeEditor->toPlainText());
 
-    if (machine->buildSuccessful)
+    Assembler assembler(*machine);
+    connect(&assembler, SIGNAL(buildErrorDetected(QString)), this, SLOT(addError(QString)));
+    assembler.assemble(codeEditor->toPlainText());
+
+    if (assembler.wasBuildSuccessful())
         sourceAndMemoryInSync = true;
 
-    machine->setPCValue(0);
     updateMachineInterface();
 }
 
@@ -388,9 +391,6 @@ void HidraGui::on_comboBoxMachine_currentIndexChanged(int index)
         break;
     default:
         break;
-    }
-    if(index != 3) {
-        connect(machine, SIGNAL(buildErrorDetected(QString)), this, SLOT(addError(QString)));
     }
 
     sourceAndMemoryInSync = false;

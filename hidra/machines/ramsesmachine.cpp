@@ -20,16 +20,10 @@ RamsesMachine::RamsesMachine()
     //////////////////////////////////////////////////
 
     memory = QVector<Byte*>(MEM_SIZE);
-    assemblerMemory = QVector<Byte*>(MEM_SIZE);
-    reserved = QVector<bool>(MEM_SIZE);
-
     correspondingLine = QVector<int>(MEM_SIZE); // Every PC value can have a corresponding line of code
 
     for (int i=0; i<memory.size(); i++)
         memory[i] = new Byte();
-
-    for (int i=0; i<assemblerMemory.size(); i++)
-        assemblerMemory[i] = new Byte();
 
     setBreakpoint(0); // Reset breakpoint
 
@@ -284,8 +278,8 @@ void RamsesMachine::step()
 //        this->step();
 //    }
 //}
-
-Machine::ErrorCode RamsesMachine::mountInstruction(QString mnemonic, QString arguments, QHash<QString, int> &labelPCMap)
+/*
+Machine::ErrorCode RamsesMachine::mountInstruction(QString mnemonic, QString arguments, Assembler *assemblerPtr)
 {
     Instruction *instruction = getInstructionFromMnemonic(mnemonic);
     QStringList argumentList = arguments.split(" ", QString::SkipEmptyParts);
@@ -354,7 +348,7 @@ Machine::ErrorCode RamsesMachine::mountInstruction(QString mnemonic, QString arg
 
     return noError;
 }
-
+*/
 Instruction* RamsesMachine::getInstructionFromValue(int value)
 {
     QVector<Instruction*>::iterator i;

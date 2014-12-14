@@ -35,7 +35,7 @@ HidraCli::HidraCli(QStringList argv, int argc, QObject *parent) :
                 std::cout << "targetMachine desconhecida, por favor verifique se ela está na lista a seguir:" << std::endl \
                           << "Neander \nAhmes \nRamses \nCesar" << std::endl;
             }
-            machine->assemble(argv.at(++i));
+            //machine->assemble(argv.at(++i)); // TODO: Uncomment
             machine->printStatusDebug();
         } else if(argv.at(i) == "init") {
             QString targetMachine = argv.at(++i).toLower();
