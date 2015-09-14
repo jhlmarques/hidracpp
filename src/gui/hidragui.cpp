@@ -213,6 +213,13 @@ void HidraGui::initializeRegisterWidgets()
         RegisterWidget *newRegister = new RegisterWidget(this, machine->getRegisterName(i));
         ui->layoutRegisters->addWidget(newRegister, i/2, i%2); // Two per line, alternates left and right columns with i%2
         registerWidgets.append(newRegister);
+
+        if (i == 64)
+        {
+            auto PCWidget = new RegisterWidget(this, machine->getRegisterName(64));
+            ui->areaRegisters->layout()->addWidget(PCWidget);
+            ui->areaRegisters->layout()->setAlignment(PCWidget, Qt::AlignHCenter);
+        }
     }
 }
 

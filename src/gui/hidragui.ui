@@ -222,8 +222,8 @@
             </property>
            </layout>
           </item>
-          <item row="0" column="0">
-           <spacer name="spacerFlagsLeft">
+          <item row="0" column="2">
+           <spacer name="spacerFlagsRight">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -235,8 +235,8 @@
             </property>
            </spacer>
           </item>
-          <item row="0" column="2">
-           <spacer name="spacerFlagsRight">
+          <item row="0" column="0">
+           <spacer name="spacerFlagsLeft">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -268,7 +268,7 @@
          <property name="title">
           <string>Registradores</string>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
           <property name="topMargin">
            <number>3</number>
           </property>
@@ -292,7 +292,7 @@
                <x>0</x>
                <y>0</y>
                <width>279</width>
-               <height>86</height>
+               <height>70</height>
               </rect>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -334,6 +334,16 @@
               </item>
              </layout>
             </widget>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="framePC">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
            </widget>
           </item>
          </layout>
