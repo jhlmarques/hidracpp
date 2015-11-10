@@ -877,7 +877,6 @@ void Machine::extractArgumentAddressingModeCode(QString &argument, AddressingMod
 
 int Machine::argumentToValue(QString argument, bool isImmediate, int immediateNumBytes)
 {
-    DEBUG_STRING(argument);
     static QRegExp matchChar("'.'");
     static QRegExp labelOffset("(.+)(\\+|\\-)(.+)"); // (label) (+|-) (offset)
 
@@ -1140,7 +1139,7 @@ void Machine::getNextOperandAddress(int &intermediateAddress, int &intermediateA
             break;
 
         case AddressingMode::INDEXED_BY_PC:
-            finalOperandAddress = address(getMemoryValue(immediateAddress) + getRegisterValue("PC"));
+            finalOperandAddress = address(getMemoryValue(immediateAddress) + getRegisterValue("PC") + instruction->getNumBytes());
             break;
     }
 }
