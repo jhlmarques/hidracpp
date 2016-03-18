@@ -1,0 +1,186 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Arquivo para teste das instruções da
+;; Máquina Queops no Hidra
+;;
+;; RESULTADO ESPERADO:
+;; A partir de 200, cada teste deve escrever o
+;; valor 255 (0xFF) na memória.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test00: ORG, DB
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    ORG    200
+Test00:    DB    255
+
+;; Labels para os outros testes:
+
+Test01:    DB    1
+Test02:    DB    1
+Test03:    DB    1
+Test04:    DB    1
+Test05:    DB    1
+Test06:    DB    1
+Test07:    DB    1
+Test08:    DB    1
+Test09:    DB    1
+Test10:    DB    1
+Test11:    DB    1
+Test12:    DB    1
+Test13:    DB    1
+Test14:    DB    1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Constantes:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    ORG    170
+
+EndInd:    DB    Val255
+Val000:    DB    0
+Val255:    DB    255
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test01: LDR, STR, endereçamento direto
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    ORG    0
+    
+    LDR    200    ; (Endereço de Test00)
+    STR    201    ; Copia o valOR    A 255 de Test00 para Test01
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test02: Labels
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    Val255
+    STR    Test02    ; Copia o valOR    A 255 para Test02
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test03: Endereçamento indireto
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    Val000
+    LDR    EndInd,I
+    STR    Test03
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test04: Endereçamento imediato
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    Val000
+    LDR    #255
+    STR    Test04
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test05: Endereçamento indexado
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    #255     
+    STR    5,PC
+    LDR    #34    ; 34 = LDR
+    STR    0,PC   ; Guarda 255 na posição PC+2
+    NOP
+    NOP
+    STR    Test05
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test06: ADD (com overflow)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    #224
+    ADD    #224    ; 224 + 224 = 192 (overflow)
+    ADD    #63    ; 192 + 63 = 255
+    STR    Test06
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test07: OR
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    #7    ; 7 = 0b00000111
+    OR     #28    ; 28 = 0b00011100 | 7 bitor 28 = 31
+    ADD    #224    ; 31 + 224 = 255
+    STR    Test07
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test08: AND
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    #7    ; 7 = 0b00000111
+    AND    #28    ; 28 = 0b00011100 | 7 bitand 28 = 4
+    ADD    #251    ; 4 + 251 = 255
+    STR    Test08
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test09: NOT
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    #7    ; 7 = 0b00000111
+    NOT        ; bitnot 7 = 248
+    ADD    #7    ; 248 + 7 = 255
+    STR    Test09
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test10: NOP, JMP
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    NOP
+    LDR    #255
+    JMP    JumpJMP    ; Pula próxima instrução
+    LDR    #7    ; Nunca executada
+
+JumpJMP:   STR    Test10
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test11: JN
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    #7
+    JN     JumpJN1    ; Jump ignorado
+    ADD    #121    ; 7 + 121 = 128 (negativo)
+
+JumpJN1:   JN    JumpJN2    ; Pula próxima instrução
+    LDR    #7    ; Nunca executada
+
+JumpJN2:   ADD    #127    ; 128 + 127 = 255
+    STR    Test11
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test12: JZ
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    #7
+    JZ     JumpJZ1    ; Jump ignorado
+    ADD    #249    ; 7 + 249 = 0 (overflow)
+
+JumpJZ1: JZ    JumpJZ2    ; Pula próxima instrução
+    LDR    #7    ; Nunca executada
+
+JumpJZ2:   ADD    #255    ; 0 + 255 = 255
+    STR    Test12
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test13: JC
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    #127
+    ADD    #128    ; 127 + 128 = 255
+    JC     JumpJC1    ; Jump ignorado
+    ADD    #128    ; 255 + 128 = 127 (carry)
+
+JumpJC1:   JC    JumpJC2    ; Pula próxima instrução
+    LDR    #28    ; Nunca executada
+
+JumpJC2:   ADD    #128    ; 127 + 128 = 255
+    STR    Test13
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Test14: HLT
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    LDR    #255
+    STR    Test14
+    HLT        ; O programa deve parar aqui
+    LDR    #7
+    STR    Test14
