@@ -4,6 +4,8 @@ PericlesMachine::PericlesMachine()
 {
     identifier = "PRC";
 
+    littleEndian = true;
+
     //////////////////////////////////////////////////
     // Initialize registers
     //////////////////////////////////////////////////
@@ -11,7 +13,7 @@ PericlesMachine::PericlesMachine()
     registers.append(new Register( "A", "....00..", 8));
     registers.append(new Register( "B", "....01..", 8));
     registers.append(new Register( "X", "....10..", 8));
-    registers.append(new Register("PC", "", 12));
+    registers.append(new Register("PC", "", 12, false));
 
     PC = registers.last();
 
@@ -81,82 +83,85 @@ void PericlesMachine::decodeInstruction(int fetchedValue, Instruction *&instruct
     addressingModeCode = extractAddressingModeCode(fetchedValue);
     registerName = extractRegisterName(fetchedValue);
 
-    if (instruction && instruction->getNumBytes() == 0)
+    if (instruction && instruction->getNumBytes() == 0) // If instruction has variable number of bytes
     {
         immediateAddress = getPCValue(); // Address that contains first argument byte
 
+        // Skip argument bytes
         incrementPCValue();
-
-        if (addressingModeCode != AddressingMode::IMMEDIATE)
+        if (addressingModeCode != AddressingMode::IMMEDIATE) // Immediate argument has only 1 byte
             incrementPCValue();
     }
 }
 
 int PericlesMachine::memoryGetOperandAddress(int immediateAddress, AddressingMode::AddressingModeCode addressingModeCode)
 {
-    int fullAddress;
-
     switch (addressingModeCode)
     {
         case AddressingMode::DIRECT:
-            fullAddress = memoryRead(immediateAddress);
-            return fullAddress + (memoryRead(immediateAddress+1) << 8);
+            return memoryReadTwoByteAddress(immediateAddress);
 
         case AddressingMode::INDIRECT:
-            fullAddress = memoryRead(immediateAddress);
-            fullAddress += (memoryRead(immediateAddress+1) << 8);
-            return memoryRead(fullAddress);
+            return memoryReadTwoByteAddress(memoryReadTwoByteAddress(immediateAddress));
 
-        case AddressingMode::IMMEDIATE: // Immediate addressing mode
+        case AddressingMode::IMMEDIATE:
             return immediateAddress;
 
-        case AddressingMode::INDEXED_BY_X: // Indexed addressing mode
-            fullAddress = memoryRead(immediateAddress);
-            fullAddress += (memoryRead(immediateAddress+1) << 8);
-            return address(fullAddress + getRegisterValue("X"));
+        case AddressingMode::INDEXED_BY_X:
+            return address(memoryReadTwoByteAddress(immediateAddress) + getRegisterValue("X"));
 
-        case AddressingMode::INDEXED_BY_PC:
-            break;
+        default:
+            return 0;
     }
-
-    return 0;
 }
 
-void PericlesMachine::getNextOperandAddress(int &intermediateAddress, int &finalOperandAddress)
+void PericlesMachine::getNextOperandAddress(int &intermediateAddress, int &intermediateAddress2, int &finalOperandAddress)
 {
     int fetchedValue = getMemoryValue(PC->getValue());
     Instruction *instruction = getInstructionFromValue(fetchedValue);
     AddressingMode::AddressingModeCode addressingModeCode = extractAddressingModeCode(fetchedValue);
     int immediateAddress;
 
-    intermediateAddress = -1;
-    finalOperandAddress = -1;
+    intermediateAddress  = -1;
+    intermediateAddress2 = -1;
+    finalOperandAddress  = -1;
 
     if (!instruction || instruction->getNumBytes() != 0)
         return;
 
-    immediateAddress = address(PC->getValue() + 1);
+    immediateAddress = PC->getValue() + 1;
 
     switch (addressingModeCode)
     {
         case AddressingMode::DIRECT:
-            finalOperandAddress = getMemoryValue(immediateAddress) + (getMemoryValue(immediateAddress+1) << 8);
+            finalOperandAddress = getMemoryTwoByteAddress(immediateAddress);
             break;
 
         case AddressingMode::INDIRECT:
-            intermediateAddress = getMemoryValue(immediateAddress) + (getMemoryValue(immediateAddress+1) << 8);
-            finalOperandAddress = getMemoryValue(intermediateAddress);
+            intermediateAddress  = getMemoryTwoByteAddress(immediateAddress);
+            intermediateAddress2 = address(intermediateAddress + 1); // Second byte
+            finalOperandAddress  = getMemoryTwoByteAddress(intermediateAddress);
             break;
 
-        case AddressingMode::IMMEDIATE: // Immediate addressing mode
+        case AddressingMode::IMMEDIATE:
             finalOperandAddress = immediateAddress;
             break;
 
-        case AddressingMode::INDEXED_BY_X: // Indexed addressing mode
-            finalOperandAddress = address(getMemoryValue(immediateAddress) + (getMemoryValue(immediateAddress+1) << 8) + getRegisterValue("X"));
+        case AddressingMode::INDEXED_BY_X:
+            finalOperandAddress = address(getMemoryTwoByteAddress(immediateAddress) + getRegisterValue("X"));
             break;
 
         case AddressingMode::INDEXED_BY_PC:
             break;
     }
+}
+
+int PericlesMachine::memoryReadTwoByteAddress(int address)
+{
+    return memoryRead(address) + (memoryRead(address + 1) << 8);
+}
+
+int PericlesMachine::getMemoryTwoByteAddress(int address)
+{
+    return getMemoryValue(address) + (getMemoryValue(address + 1) << 8);
 }

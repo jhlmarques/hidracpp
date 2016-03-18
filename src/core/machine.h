@@ -30,8 +30,8 @@ namespace FileErrorCode
 class Machine : public QObject
 {
     Q_OBJECT
-public:
 
+public:
     enum ErrorCode
     {
         noError = 0,
@@ -50,7 +50,6 @@ public:
 
     // Constants
     QString ALLOCATE_SYMBOL = "%";
-    QString CHAR_SYMBOL = "$";
     QString QUOTE_SYMBOL = "¢";
 
     explicit Machine(QObject *parent = 0);
@@ -85,16 +84,15 @@ public:
     // Assembler
     //////////////////////////////////////////////////
 
-    // Build
-    void buildInstruction(QString mnemonic, QString arguments);
-
     // Assembly
     void assemble(QString sourceCode);
     void obeyDirective(QString mnemonic, QString arguments, bool reserveOnly, int sourceLine);
+    void buildInstruction(QString mnemonic, QString arguments);
     void emitError(int lineNumber, Machine::ErrorCode errorCode);
 
     // Assembler memory
     void clearAssemblerData();
+    void setAssemblerMemoryNext(int value); // Increments PC
     void copyAssemblerMemoryToMemory();
     void reserveAssemblerMemory(int sizeToReserve, int associatedSourceLine);
     virtual int calculateBytesToReserve(QString addressArgument);
@@ -110,7 +108,7 @@ public:
     QStringList splitArguments(QString arguments);
     void extractArgumentAddressingModeCode(QString &argument, AddressingMode::AddressingModeCode &addressingModeCode);
     int convertToUnsigned(int value, int numberOfBytes);
-    int argumentToValue(QString argument, bool isImmediate);
+    int argumentToValue(QString argument, bool isImmediate, int immediateNumBytes = 1);
     int stringToInt(QString valueString);
 
 
@@ -146,21 +144,21 @@ public:
     void setRunning(bool running);
 
     bool getBuildSuccessful();
-    int getFirstErrorLine();
+    int  getFirstErrorLine();
 
-    int getBreakpoint() const;
+    int  getBreakpoint() const;
     void setBreakpoint(int value);
 
-    virtual void getNextOperandAddress(int &intermediateAddress, int &finalOperandAddress);
+    virtual void getNextOperandAddress(int &intermediateAddress, int &intermediateAddress2, int &finalOperandAddress);
 
-    int getMemorySize() const;
+    int  getMemorySize() const;
     void setMemorySize(int size);
-    int getMemoryValue(int address) const;
+    int  getMemoryValue(int address) const;
     void setMemoryValue(int address, int value);
     bool hasByteChanged(int address); // Since last look-up
     void clearMemory();
 
-    int getNumberOfFlags() const;
+    int  getNumberOfFlags() const;
     QString getFlagName(int id) const;
     int  getFlagValue(int id) const;
     void setFlagValue(int id, int value);
@@ -169,18 +167,18 @@ public:
     void setFlagValue(Flag::FlagCode flagCode, int value);
     void clearFlags();
 
-    int getNumberOfRegisters() const;
-    int getRegisterBitCode(QString registerName) const; // -1 if no code
+    int  getNumberOfRegisters() const;
+    int  getRegisterBitCode(QString registerName) const; // -1 if no code
     QString getRegisterName(int id) const;
-    int  getRegisterValue(int id) const;
+    int  getRegisterValue(int id, bool signedData = false) const;
     void setRegisterValue(int id, int value);
     int  getRegisterValue(QString registerName) const;
     void setRegisterValue(QString registerName, int value);
     void clearRegisters();
 
-    int getPCValue() const;
+    int  getPCValue() const;
     void setPCValue(int value);
-    void incrementPCValue();
+    void incrementPCValue(int units = 1);
 
     int getPCCorrespondingSourceLine();
     int getSourceLineCorrespondingAddress(int line);
@@ -195,8 +193,8 @@ public:
     AddressingMode::AddressingModeCode getDefaultAddressingModeCode();
     int getAddressingModeBitCode(AddressingMode::AddressingModeCode addressingModeCode);
 
-    int getInstructionCount();
-    int getAccessCount();
+    int  getInstructionCount();
+    int  getAccessCount();
     void clearCounters();
 
     virtual void clear();
@@ -207,7 +205,6 @@ public:
     void getAddressingModeDescription(AddressingMode::AddressingModeCode addressingModeCode, QString &acronym, QString &name, QString &format, QString &description);
 
 protected:
-
     QString identifier;
     QVector<Register*> registers;
     Register *PC;
@@ -222,9 +219,9 @@ protected:
     QVector<AddressingMode*> addressingModes;
     QHash<QString, int> labelPCMap;
     QHash<QString, QString> descriptions;
-    int instructionPC; // Used by PC addressing mode
     bool buildSuccessful;
     bool running;
+    bool littleEndian;
     int firstErrorLine;
     int breakpoint;
     int instructionCount;
@@ -233,7 +230,6 @@ protected:
 
 signals:
     void buildErrorDetected(QString);
-
 };
 
 

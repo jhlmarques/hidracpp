@@ -9,7 +9,7 @@ AhmesMachine::AhmesMachine()
     //////////////////////////////////////////////////
 
     registers.append(new Register("AC", "........", 8));
-    registers.append(new Register("PC", "", 8));
+    registers.append(new Register("PC", "", 8, false));
 
     PC = registers.last();
 
@@ -29,7 +29,7 @@ AhmesMachine::AhmesMachine()
 
     flags.append(new Flag(Flag::NEGATIVE, "N"));
     flags.append(new Flag(Flag::ZERO, "Z", true));
-    flags.append(new Flag(Flag::OVERFLOW, "V"));
+    flags.append(new Flag(Flag::OVERFLOW_FLAG, "V"));
     flags.append(new Flag(Flag::CARRY, "C"));
     flags.append(new Flag(Flag::BORROW, "B"));
 
