@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1115</width>
-    <height>505</height>
+    <height>513</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -572,6 +572,9 @@
            <height>40</height>
           </size>
          </property>
+         <property name="cursor">
+          <cursorShape>WhatsThisCursor</cursorShape>
+         </property>
          <property name="statusTip">
           <string>Passe o mouse para obter a sintaxe e a descrição de cada instrução da máquina escolhida.</string>
          </property>
@@ -631,6 +634,9 @@
            <width>0</width>
            <height>40</height>
           </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>WhatsThisCursor</cursorShape>
          </property>
          <property name="statusTip">
           <string>Passe o mouse para obter a sintaxe e a descrição de cada modo de endereçamento da máquina escolhida.</string>

@@ -11,9 +11,12 @@
  *
  *******************************************************************************/
 
+#include "hintwidget.h"
 #include "hidragui.h"
 #include "ui_hidragui.h"
+
 #include <QSizeGrip>
+#include <QToolTip>
 
 #define DEBUG_INT(value) qDebug(QString::number(value).toStdString().c_str());
 #define DEBUG_STRING(value) qDebug(value.toStdString().c_str());
@@ -357,20 +360,17 @@ void HidraGui::initializeInstructionsList()
 
     foreach (Instruction *instruction, machine->getInstructions())
     {
-        QLabel *instructionText = new QLabel(this);
-        instructionText->setTextFormat(Qt::RichText);
-        instructionText->setEnabled(false); // Grayed out
+        QString mnemonic = instruction->getMnemonic().toUpper();
+        QString arguments = instruction->getArguments().join(" ");
+        QString description = machine->getDescription(instruction->getAssemblyFormat());
 
-        // Label text
-        instructionText->setText(instruction->getMnemonic().toUpper());
+        // Create hint widget
+        QString label = mnemonic;
+        QString hint = "<b>" + mnemonic + "</b> " + arguments + "<br>" +
+                       description;
+        HintWidget *instructionHint = new HintWidget(this, label, hint);
 
-        // Description in tooltip
-        QString toolTip = "<b>" + instruction->getMnemonic().toUpper() + "</b> " +
-                          instruction->getArguments().join(" ") + "<br>" +
-                          machine->getDescription(instruction->getAssemblyFormat());
-        instructionText->setToolTip(toolTip);
-
-        ui->layoutInstructions->addWidget(instructionText, i/6, i%6);
+        ui->layoutInstructions->addWidget(instructionHint, i/6, i%6);
         i += 1;
     }
 }
@@ -386,20 +386,14 @@ void HidraGui::initializeAddressingModesList()
         QString acronym, name, format, description;
         machine->getAddressingModeDescription(addressingMode->getAddressingModeCode(), acronym, name, format, description);
 
-        QLabel *addressingModeText = new QLabel(this);
-        addressingModeText->setTextFormat(Qt::RichText);
-        addressingModeText->setEnabled(false); // Grayed out
+        // Create hint widget
+        QString label = acronym;
+        QString hint = "<b>" + name   + "</b><br>" +
+                       "<i>" + format + "</i><br>" +
+                       description;
+        HintWidget *addressingModeHint = new HintWidget(this, label, hint);
 
-        // Label text
-        addressingModeText->setText(acronym);
-
-        // Description in tooltip
-        QString toolTip = "<b>" + name   + "</b><br>" +
-                          "<i>" + format + "</i><br>" +
-                          description;
-        addressingModeText->setToolTip(toolTip);
-
-        ui->layoutAddressingModes->addWidget(addressingModeText, i/6, i%6);
+        ui->layoutAddressingModes->addWidget(addressingModeHint, i/6, i%6);
         i += 1;
     }
 }
