@@ -820,7 +820,7 @@
   </action>
   <action name="actionRun">
    <property name="text">
-    <string>Rodar</string>
+    <string>Rodar/Parar</string>
    </property>
    <property name="statusTip">
     <string>Executa o programa a partir da posição atual de PC.</string>
@@ -924,7 +924,7 @@
   </action>
   <action name="actionSetBreakpoint">
    <property name="text">
-    <string>Inserir/remover breakpoint</string>
+    <string>Inserir/Remover breakpoint</string>
    </property>
    <property name="statusTip">
     <string>Permite que o programa pare a execução ao alcançar a linha selecionada.</string>
