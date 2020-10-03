@@ -1716,14 +1716,14 @@ void Machine::getAddressingModeDescription(AddressingMode::AddressingModeCode ad
             acronym     = "IDX";
             name        = "Indexado por X";
             format      = "Formato: a,X (sufixo ,X)";
-            description = "Endereçamento direto com deslocamento (offset). A soma dos valores de ‘a’ e do registrador X representa o endereço direto.";
+            description = "Endereçamento direto com deslocamento (offset). A soma dos valores de 'a' e do registrador X representa o endereço direto.";
             break;
 
         case AddressingMode::INDEXED_BY_PC:
             acronym     = "IPC";
             name        = "Indexado por PC";
             format      = "Formato: a,PC (sufixo ,PC)";
-            description = "Endereçamento direto com deslocamento (offset). A soma dos valores de ‘a’ e do registrador PC representa o endereço direto.";
+            description = "Endereçamento direto com deslocamento (offset). A soma dos valores de 'a' e do registrador PC representa o endereço direto.";
             break;
     }
 }
