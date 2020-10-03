@@ -1672,6 +1672,10 @@ void Machine::generateDescriptions()
     descriptions["inc r"] = "Incrementa o registrador 'r' em uma unidade.";
     descriptions["dec r"] = "Decrementa o registrador 'r' de uma unidade.";
     descriptions["if r a0 a1"] = "Se o registrador 'r' for igual a zero (if zero), desvia a execução para o endereço 'a0'. Se for diferente de zero, desvia para 'a1'.";
+
+    // Cromag
+    descriptions["str a"] = "Armazena o valor do acumulador no endereço 'a'.";
+    descriptions["ldr a"] = "Carrega o valor no endereço 'a' para o acumulador.";
 }
 
 QString Machine::getDescription(QString assemblyFormat)
