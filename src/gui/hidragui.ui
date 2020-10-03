@@ -460,7 +460,7 @@
             </size>
            </property>
            <property name="statusTip">
-            <string>Limpa a memória atual e compila o código-fonte para a memória.</string>
+            <string>(Atalho: F5) Limpa a memória atual e compila o código-fonte para a memória.</string>
            </property>
            <property name="text">
             <string>Montar</string>
@@ -487,7 +487,7 @@
               </size>
              </property>
              <property name="statusTip">
-              <string>Zera o valor do registrador PC para que o programa seja executado novamente.</string>
+              <string>(Atalho: F6) Zera o valor do registrador PC para que o programa seja executado novamente.</string>
              </property>
              <property name="text">
               <string>Zerar PC</string>
@@ -509,7 +509,7 @@
               </size>
              </property>
              <property name="statusTip">
-              <string>Executa o programa a partir da posição atual de PC, ou pausa a execução.</string>
+              <string>(Atalho: F7) Executa o programa a partir da posição atual de PC, ou pausa a execução.</string>
              </property>
              <property name="whatsThis">
               <string/>
@@ -537,7 +537,7 @@
               </size>
              </property>
              <property name="statusTip">
-              <string>Executa a instrução atual e avança PC para a instrução seguinte.</string>
+              <string>(Atalho: F8) Executa a instrução atual e avança PC para a instrução seguinte.</string>
              </property>
              <property name="text">
               <string>Passo</string>
