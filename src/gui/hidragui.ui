@@ -834,7 +834,7 @@
     <string>Salvar como...</string>
    </property>
    <property name="statusTip">
-    <string>Salvar como</string>
+    <string>Salva o código atual com um novo nome.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
@@ -856,7 +856,7 @@
     <string>Sair</string>
    </property>
    <property name="statusTip">
-    <string>Sair</string>
+    <string>Fecha a janela ativa.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -867,7 +867,7 @@
     <string>&amp;Salvar</string>
    </property>
    <property name="statusTip">
-    <string>Salvar</string>
+    <string>Salva o código atual em um arquivo.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -878,7 +878,7 @@
     <string>Abrir</string>
    </property>
    <property name="statusTip">
-    <string>Abrir</string>
+    <string>Abre um arquivo existente.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -946,7 +946,7 @@
     <string>Sobre</string>
    </property>
    <property name="statusTip">
-    <string>Sobre</string>
+    <string>Exibe informações sobre o programa.</string>
    </property>
   </action>
   <action name="actionNew">
@@ -954,7 +954,7 @@
     <string>Novo</string>
    </property>
    <property name="statusTip">
-    <string>Novo</string>
+    <string>Cria um novo arquivo.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
