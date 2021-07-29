@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Buscar e Substituir</string>
   </property>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
@@ -19,7 +19,7 @@
      <x>9</x>
      <y>9</y>
      <width>491</width>
-     <height>391</height>
+     <height>426</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
