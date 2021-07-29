@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QHash>
 #include <QPair>
+#include <QMessageBox>
 #include <iostream>
 
 #include "byte.h"
@@ -238,6 +239,7 @@ protected:
     QVector<AddressingMode*> addressingModes;
     QHash<QString, int> labelPCMap;
     QHash<QString, QString> descriptions;
+    QMessageBox hltMsg;
     bool buildSuccessful;
     bool running;
     bool littleEndian;

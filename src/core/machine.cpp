@@ -293,6 +293,8 @@ void Machine::executeInstruction(Instruction *&instruction, AddressingMode::Addr
 
     case Instruction::HLT:
         setRunning(false);
+        hltMsg.setText("HLT atingido.");
+        hltMsg.exec();
         break;
 
     default: // NOP etc.
